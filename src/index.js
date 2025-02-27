@@ -22,12 +22,21 @@ io.on("connection", (socket) => {
   //   console.log("cliente desconectado", io.engine.clientsCount);
   // });
 
-  socket.conn.once("upgrade", () => {
-    console.log(
-      "Hemos pasado de un protocolo HTTP a un protocolo WebSocket",
-      socket.conn.transport.name
-    );
+  // socket.conn.once("upgrade", () => {
+  //   console.log(
+  //     "Hemos pasado de un protocolo HTTP a un protocolo WebSocket",
+  //     socket.conn.transport.name
+  //   );
+  // });
+  // emision basica
+  socket.emit("Welcome", "Ahora estas conectado 😍");
+
+  socket.on("server", (message) => {
+    console.log(message);
   });
+
+  // emision a todos los clientes
+  io.emit("everyone", socket.id + " Hola a todos los clientes 🎹");
 });
 
 httpServer.listen(3000, () => {
