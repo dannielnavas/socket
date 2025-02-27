@@ -14,7 +14,20 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket);
+  // console.log("clientes conectados", io.engine.clientsCount);
+  // console.log("id del cliente conectado", socket.id);
+
+  // socket.on("disconnect", () => {
+  //   console.log("cliente ", socket.id, " desconectado");
+  //   console.log("cliente desconectado", io.engine.clientsCount);
+  // });
+
+  socket.conn.once("upgrade", () => {
+    console.log(
+      "Hemos pasado de un protocolo HTTP a un protocolo WebSocket",
+      socket.conn.transport.name
+    );
+  });
 });
 
 httpServer.listen(3000, () => {
