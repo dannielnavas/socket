@@ -60,7 +60,7 @@ const listener = () => {
   console.log("se apaga el evento");
 };
 
-socket.on("off", listener);
+socket.on("off", listener); // se apaga el evento despues de 5 segundos debe tener un nombre el evento para poder apagarlo
 
 setTimeout(() => {
   socket.off("off", listener);
