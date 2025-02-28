@@ -36,3 +36,32 @@ emitToServer.addEventListener("click", () => {
 socket.on("everyone", (message) => {
   console.log(message);
 });
+
+const emitToLast = document.querySelector("#emit-to-last");
+
+emitToLast.addEventListener("click", () => {
+  socket.emit("last", "Hola ultimo 😎");
+});
+
+socket.on("salute", (message) => {
+  console.log(message);
+});
+
+// on once off
+socket.on("on", (message) => {
+  console.log(message);
+});
+
+socket.once("once", (mensaje) => {
+  console.log(mensaje);
+});
+
+const listener = () => {
+  console.log("se apaga el evento");
+};
+
+socket.on("off", listener);
+
+setTimeout(() => {
+  socket.off("off", listener);
+}, 5000);

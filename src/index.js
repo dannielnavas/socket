@@ -7,6 +7,8 @@ const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 
+const socketsOnline = [];
+
 app.use(express.static(path.join(__dirname, "views")));
 
 app.get("/", (req, res) => {
@@ -14,6 +16,7 @@ app.get("/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
+  socketsOnline.push(socket.id);
   // console.log("clientes conectados", io.engine.clientsCount);
   // console.log("id del cliente conectado", socket.id);
 
@@ -37,6 +40,24 @@ io.on("connection", (socket) => {
 
   // emision a todos los clientes
   io.emit("everyone", socket.id + " Hola a todos los clientes 🎹");
+
+  // emision a uno solo
+
+  socket.on("last", (message) => {
+    const lastSocket = socketsOnline[socketsOnline.length - 1];
+    io.to(lastSocket).emit("salute", message);
+  });
+
+  // on once off
+  socket.emit("on", "Este mensaje se emitira varias veces 😎 por el uso del on");
+
+  socket.emit("once", "Este mensaje se emitira una sola vez 😎 por el uso del once");
+
+  // socket.emit("off", "holi");
+
+  // setTimeout(() => {
+  //   socket.off("off", "holi");
+  // }, 5000);
 });
 
 httpServer.listen(3000, () => {
