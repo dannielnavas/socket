@@ -32,32 +32,39 @@ io.on("connection", (socket) => {
   //   );
   // });
   // emision basica
-  socket.emit("Welcome", "Ahora estas conectado 😍");
+  // socket.emit("Welcome", "Ahora estas conectado 😍");
 
-  socket.on("server", (message) => {
-    console.log(message);
-  });
+  // socket.on("server", (message) => {
+  //   console.log(message);
+  // });
 
-  // emision a todos los clientes
-  io.emit("everyone", socket.id + " Hola a todos los clientes 🎹");
+  // // emision a todos los clientes
+  // io.emit("everyone", socket.id + " Hola a todos los clientes 🎹");
 
-  // emision a uno solo
+  // // emision a uno solo
 
-  socket.on("last", (message) => {
-    const lastSocket = socketsOnline[socketsOnline.length - 1];
-    io.to(lastSocket).emit("salute", message);
-  });
+  // socket.on("last", (message) => {
+  //   const lastSocket = socketsOnline[socketsOnline.length - 1];
+  //   io.to(lastSocket).emit("salute", message);
+  // });
 
-  // on once off
-  socket.emit("on", "Este mensaje se emitira varias veces 😎 por el uso del on");
+  // // on once off
+  // socket.emit("on", "Este mensaje se emitira varias veces 😎 por el uso del on");
 
-  socket.emit("once", "Este mensaje se emitira una sola vez 😎 por el uso del once");
+  // socket.emit("once", "Este mensaje se emitira una sola vez 😎 por el uso del once");
 
   // socket.emit("off", "holi");
 
   // setTimeout(() => {
   //   socket.off("off", "holi");
   // }, 5000);
+
+  // ejemplo circulo
+
+  socket.on("circle position", (position) => {
+    //io.emit("move circle", position); // emitir a todos los clientes conectados incluso a mi  mismo
+    socket.broadcast.emit("move circle", position); // emitir a todos los clientes conectados excepto a mi
+  });
 });
 
 httpServer.listen(3000, () => {

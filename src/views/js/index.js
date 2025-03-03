@@ -22,46 +22,75 @@ const socket = io();
 //   console.log("reconectado exitosamente", socket.id);
 // });
 
-socket.on("Welcome", (message) => {
-  const text = document.querySelector("#text");
-  text.textContent = message;
-});
+// socket.on("Welcome", (message) => {
+//   const text = document.querySelector("#text");
+//   text.textContent = message;
+// });
 
-const emitToServer = document.querySelector("#emit-to-server");
+// const emitToServer = document.querySelector("#emit-to-server");
 
-emitToServer.addEventListener("click", () => {
-  socket.emit("server", "Hola desde el cliente 😎");
-});
+// emitToServer.addEventListener("click", () => {
+//   socket.emit("server", "Hola desde el cliente 😎");
+// });
 
-socket.on("everyone", (message) => {
-  console.log(message);
-});
+// socket.on("everyone", (message) => {
+//   console.log(message);
+// });
 
-const emitToLast = document.querySelector("#emit-to-last");
+// const emitToLast = document.querySelector("#emit-to-last");
 
-emitToLast.addEventListener("click", () => {
-  socket.emit("last", "Hola ultimo 😎");
-});
+// emitToLast.addEventListener("click", () => {
+//   socket.emit("last", "Hola ultimo 😎");
+// });
 
-socket.on("salute", (message) => {
-  console.log(message);
-});
+// socket.on("salute", (message) => {
+//   console.log(message);
+// });
 
-// on once off
-socket.on("on", (message) => {
-  console.log(message);
-});
+// // on once off
+// socket.on("on", (message) => {
+//   console.log(message);
+// });
 
-socket.once("once", (mensaje) => {
-  console.log(mensaje);
-});
+// socket.once("once", (mensaje) => {
+//   console.log(mensaje);
+// });
 
-const listener = () => {
-  console.log("se apaga el evento");
+// const listener = () => {
+//   console.log("se apaga el evento");
+// };
+
+// socket.on("off", listener); // se apaga el evento despues de 5 segundos debe tener un nombre el evento para poder apagarlo
+
+// setTimeout(() => {
+//   socket.off("off", listener);
+// }, 5000);
+
+const circle = document.querySelector("#circle");
+
+const drawCircle = (position) => {
+  circle.style.top = position.top;
+  circle.style.left = position.left;
 };
 
-socket.on("off", listener); // se apaga el evento despues de 5 segundos debe tener un nombre el evento para poder apagarlo
+const drag = (e) => {
+  const position = {
+    top: e.clientY + "px",
+    left: e.clientX + "px",
+  };
 
-setTimeout(() => {
-  socket.off("off", listener);
-}, 5000);
+  drawCircle(position);
+  socket.emit("circle position", position);
+};
+
+document.addEventListener("mousedown", (e) => {
+  document.addEventListener("mousemove", drag);
+});
+
+document.addEventListener("mouseup", (e) => {
+  document.removeEventListener("mousemove", drag);
+});
+
+socket.on("move circle", (position) => {
+  drawCircle(position);
+});
