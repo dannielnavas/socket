@@ -60,10 +60,41 @@ io.on("connection", (socket) => {
   // }, 5000);
 
   // ejemplo circulo
+  // mover circulo con el mouse y socket.io que pemite mover el circulo en tiempo real entre diferentes clientes
+  // socket.on("circle position", (position) => {
+  //   //io.emit("move circle", position); // emitir a todos los clientes conectados incluso a mi  mismo
+  //   socket.broadcast.emit("move circle", position); // emitir a todos los clientes conectados excepto a mi
+  // });
 
-  socket.on("circle position", (position) => {
-    //io.emit("move circle", position); // emitir a todos los clientes conectados incluso a mi  mismo
-    socket.broadcast.emit("move circle", position); // emitir a todos los clientes conectados excepto a mi
+  socket.connectedRoom = "";
+
+  socket.on("connect to room", (room) => {
+    socket.leave(socket.connectedRoom); // lo saca de la sala actual
+
+    switch (room) {
+      case "room1":
+        socket.join("room1");
+        socket.connectedRoom = "room1";
+        break;
+      case "room2":
+        socket.join("room2");
+        socket.connectedRoom = "room2";
+        break;
+      case "room3":
+        socket.join("room3");
+        socket.connectedRoom = "room3";
+        break;
+      default:
+        socket.join("default");
+    }
+  });
+
+  socket.on("message", (message) => {
+    const room = socket.connectedRoom;
+    io.to(room).emit("message", {
+      message,
+      room,
+    });
   });
 });
 
