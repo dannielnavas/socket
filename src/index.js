@@ -1,3 +1,7 @@
+//process.env.DEBUG = "*"; // enable all debug logs PARA EL SOCKET.IO
+// process.env.DEBUG = "engine, socket.io:socket";
+process.env.DEBUG = "engine, socket.io:socket, socket.io:cliente";
+
 const express = require("express");
 const { createServer } = require("http");
 const path = require("path");
@@ -137,19 +141,26 @@ app.get("/", (req, res) => {
 
 // middleware para autorizar a los clientes
 
-io.use((socket, next) => {
-  const token = socket.handshake.auth.token;
-  if (token === "123456") {
-    next();
-  } else {
-    const err = new Error("No autorizado");
-    err.data = { message: "No tienes autorizacion" };
-    next(err);
-  }
-});
+// io.use((socket, next) => {
+//   const token = socket.handshake.auth.token;
+//   if (token === "123456") {
+//     next();
+//   } else {
+//     const err = new Error("No autorizado");
+//     err.data = { message: "No tienes autorizacion" };
+//     next(err);
+//   }
+// });
 
+// io.on("connection", (socket) => {
+//   console.log("cliente conectado", socket.id);
+// });
+
+// debugger
 io.on("connection", (socket) => {
-  console.log("cliente conectado", socket.id);
+  socket.on("circle position", (position) => {
+    socket.broadcast.emit("move circle", position);
+  });
 });
 
 httpServer.listen(3000, () => {
