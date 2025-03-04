@@ -121,9 +121,17 @@ app.get("/", (req, res) => {
 
 // reconnect y offline
 
+// io.on("connection", (socket) => {
+//   socket.on("is connect", (msg) => {
+//     console.log(msg);
+//   });
+// });
+
+// volatiles
+
 io.on("connection", (socket) => {
-  socket.on("is connect", (msg) => {
-    console.log(msg);
+  socket.on("circle position", (position) => {
+    socket.broadcast.emit("move circle", position);
   });
 });
 

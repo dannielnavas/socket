@@ -177,20 +177,52 @@ const socket = io(); // conectarse al servidor pero en caso de namespaces se qui
 
 // disconnect and reconnect
 
-const send = document.querySelector("#send");
-const disconnect = document.querySelector("#disconnect");
-const reconnect = document.querySelector("#reconnect");
+// const send = document.querySelector("#send");
+// const disconnect = document.querySelector("#disconnect");
+// const reconnect = document.querySelector("#reconnect");
 
-send.addEventListener("click", () => {
-  if (socket.connected) {
-    socket.emit("is connect", "Esta conectado 😎");
-  }
+// send.addEventListener("click", () => {
+//   if (socket.connected) {
+//     socket.emit("is connect", "Esta conectado 😎");
+//   }
+// });
+
+// disconnect.addEventListener("click", () => {
+//   socket.disconnect();
+// });
+
+// reconnect.addEventListener("click", () => {
+//   socket.connect();
+// });
+
+// volatile
+
+const circle = document.querySelector("#circle");
+
+const drawCircle = (position) => {
+  circle.style.top = position.top;
+  circle.style.left = position.left;
+};
+
+const drag = (e) => {
+  const position = {
+    top: e.clientY + "px",
+    left: e.clientX + "px",
+  };
+
+  drawCircle(position);
+  console.log("Se envía el evento al servidor");
+  socket.volatile.emit("circle position", position); // se envia la ultima posición mas no todos los eventos que se generen
+};
+
+document.addEventListener("mousedown", (e) => {
+  document.addEventListener("mousemove", drag);
 });
 
-disconnect.addEventListener("click", () => {
-  socket.disconnect();
+document.addEventListener("mouseup", (e) => {
+  document.removeEventListener("mousemove", drag);
 });
 
-reconnect.addEventListener("click", () => {
-  socket.connect();
+socket.on("move circle", (position) => {
+  drawCircle(position);
 });
