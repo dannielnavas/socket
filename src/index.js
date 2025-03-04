@@ -100,20 +100,30 @@ app.get("/", (req, res) => {
 // });
 // });
 
-const profesores = io.of("/profesores");
-const estudiantes = io.of("/estudiantes");
+// namespace
 
-profesores.on("connection", (socket) => {
-  console.log("profesor conectado");
-  socket.on("sendMessage", (message) => {
-    profesores.emit("message", message);
-  });
-});
+// const profesores = io.of("/profesores");
+// const estudiantes = io.of("/estudiantes");
 
-estudiantes.on("connection", (socket) => {
-  console.log("estudiante conectado");
-  socket.on("sendMessage", (message) => {
-    estudiantes.emit("message", message);
+// profesores.on("connection", (socket) => {
+//   console.log("profesor conectado");
+//   socket.on("sendMessage", (message) => {
+//     profesores.emit("message", message);
+//   });
+// });
+
+// estudiantes.on("connection", (socket) => {
+//   console.log("estudiante conectado");
+//   socket.on("sendMessage", (message) => {
+//     estudiantes.emit("message", message);
+//   });
+// });
+
+// reconnect y offline
+
+io.on("connection", (socket) => {
+  socket.on("is connect", (msg) => {
+    console.log(msg);
   });
 });
 

@@ -1,4 +1,4 @@
-// const socket = io();
+const socket = io(); // conectarse al servidor pero en caso de namespaces se quita esta porque es global
 
 // function checkSocketStatus() {
 //   console.log("El estado de mi socket es ", socket.connected);
@@ -135,42 +135,62 @@
 
 // namespace
 
-const user = prompt("Ingresa tu nombre de usuarios");
+// const user = prompt("Ingresa tu nombre de usuarios");
 
-const profes = ["Samuel", "Leslye"];
+// const profes = ["Samuel", "Leslye"];
 
-let socketNameSpace, group;
+// let socketNameSpace, group;
 
-const chat = document.querySelector("#chat");
-const namespace = document.querySelector("#namespace");
+// const chat = document.querySelector("#chat");
+// const namespace = document.querySelector("#namespace");
 
-if (profes.includes(user)) {
-  socketNameSpace = io("/profesores");
-  group = "profesores";
-} else {
-  socketNameSpace = io("/estudiantes");
-  group = "estudiantes";
-}
+// if (profes.includes(user)) {
+//   socketNameSpace = io("/profesores");
+//   group = "profesores";
+// } else {
+//   socketNameSpace = io("/estudiantes");
+//   group = "estudiantes";
+// }
 
-socketNameSpace.on("connect", () => {
-  namespace.textContent = group;
+// socketNameSpace.on("connect", () => {
+//   namespace.textContent = group;
+// });
+
+// // logica de envio de mensajes
+
+// const sendMessage = document.querySelector("#sendMessage");
+
+// sendMessage.addEventListener("click", () => {
+//   const message = prompt("Escribe tu mensaje");
+//   socketNameSpace.emit("sendMessage", {
+//     user,
+//     message,
+//   });
+// });
+
+// socketNameSpace.on("message", (data) => {
+//   const { user, message } = data;
+//   const li = document.createElement("li");
+//   li.textContent = `${user}: ${message}`;
+//   chat.appendChild(li);
+// });
+
+// disconnect and reconnect
+
+const send = document.querySelector("#send");
+const disconnect = document.querySelector("#disconnect");
+const reconnect = document.querySelector("#reconnect");
+
+send.addEventListener("click", () => {
+  if (socket.connected) {
+    socket.emit("is connect", "Esta conectado 😎");
+  }
 });
 
-// logica de envio de mensajes
-
-const sendMessage = document.querySelector("#sendMessage");
-
-sendMessage.addEventListener("click", () => {
-  const message = prompt("Escribe tu mensaje");
-  socketNameSpace.emit("sendMessage", {
-    user,
-    message,
-  });
+disconnect.addEventListener("click", () => {
+  socket.disconnect();
 });
 
-socketNameSpace.on("message", (data) => {
-  const { user, message } = data;
-  const li = document.createElement("li");
-  li.textContent = `${user}: ${message}`;
-  chat.appendChild(li);
+reconnect.addEventListener("click", () => {
+  socket.connect();
 });
