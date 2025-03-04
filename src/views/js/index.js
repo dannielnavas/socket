@@ -155,3 +155,22 @@ if (profes.includes(user)) {
 socketNameSpace.on("connect", () => {
   namespace.textContent = group;
 });
+
+// logica de envio de mensajes
+
+const sendMessage = document.querySelector("#sendMessage");
+
+sendMessage.addEventListener("click", () => {
+  const message = prompt("Escribe tu mensaje");
+  socketNameSpace.emit("sendMessage", {
+    user,
+    message,
+  });
+});
+
+socketNameSpace.on("message", (data) => {
+  const { user, message } = data;
+  const li = document.createElement("li");
+  li.textContent = `${user}: ${message}`;
+  chat.appendChild(li);
+});

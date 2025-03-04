@@ -105,12 +105,16 @@ const estudiantes = io.of("/estudiantes");
 
 profesores.on("connection", (socket) => {
   console.log("profesor conectado");
-  socket.emit("Welcome", "Bienvenido profesor");
+  socket.on("sendMessage", (message) => {
+    profesores.emit("message", message);
+  });
 });
 
 estudiantes.on("connection", (socket) => {
   console.log("estudiante conectado");
-  socket.emit("Welcome", "Bienvenido estudiante");
+  socket.on("sendMessage", (message) => {
+    estudiantes.emit("message", message);
+  });
 });
 
 httpServer.listen(3000, () => {
