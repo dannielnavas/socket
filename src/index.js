@@ -129,10 +129,27 @@ app.get("/", (req, res) => {
 
 // volatiles
 
+// io.on("connection", (socket) => {
+//   socket.on("circle position", (position) => {
+//     socket.broadcast.emit("move circle", position);
+//   });
+// });
+
+// middleware para autorizar a los clientes
+
+io.use((socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (token === "123456") {
+    next();
+  } else {
+    const err = new Error("No autorizado");
+    err.data = { message: "No tienes autorizacion" };
+    next(err);
+  }
+});
+
 io.on("connection", (socket) => {
-  socket.on("circle position", (position) => {
-    socket.broadcast.emit("move circle", position);
-  });
+  console.log("cliente conectado", socket.id);
 });
 
 httpServer.listen(3000, () => {

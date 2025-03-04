@@ -1,4 +1,4 @@
-const socket = io(); // conectarse al servidor pero en caso de namespaces se quita esta porque es global
+//const socket = io(); // conectarse al servidor pero en caso de namespaces se quita esta porque es global
 
 // function checkSocketStatus() {
 //   console.log("El estado de mi socket es ", socket.connected);
@@ -197,32 +197,44 @@ const socket = io(); // conectarse al servidor pero en caso de namespaces se qui
 
 // volatile
 
-const circle = document.querySelector("#circle");
+// const circle = document.querySelector("#circle");
 
-const drawCircle = (position) => {
-  circle.style.top = position.top;
-  circle.style.left = position.left;
-};
+// const drawCircle = (position) => {
+//   circle.style.top = position.top;
+//   circle.style.left = position.left;
+// };
 
-const drag = (e) => {
-  const position = {
-    top: e.clientY + "px",
-    left: e.clientX + "px",
-  };
+// const drag = (e) => {
+//   const position = {
+//     top: e.clientY + "px",
+//     left: e.clientX + "px",
+//   };
 
-  drawCircle(position);
-  console.log("Se envía el evento al servidor");
-  socket.volatile.emit("circle position", position); // se envia la ultima posición mas no todos los eventos que se generen
-};
+//   drawCircle(position);
+//   console.log("Se envía el evento al servidor");
+//   socket.volatile.emit("circle position", position); // se envia la ultima posición mas no todos los eventos que se generen
+// };
 
-document.addEventListener("mousedown", (e) => {
-  document.addEventListener("mousemove", drag);
+// document.addEventListener("mousedown", (e) => {
+//   document.addEventListener("mousemove", drag);
+// });
+
+// document.addEventListener("mouseup", (e) => {
+//   document.removeEventListener("mousemove", drag);
+// });
+
+// socket.on("move circle", (position) => {
+//   drawCircle(position);
+// });
+const socket = io({
+  auth: {
+    token: "1234s56",
+  },
 });
 
-document.addEventListener("mouseup", (e) => {
-  document.removeEventListener("mousemove", drag);
-});
+// En caso de error en el middleware de autenticación
 
-socket.on("move circle", (position) => {
-  drawCircle(position);
+socket.on("connect_error", (error) => {
+  console.log(error.message);
+  console.log(error.data.message);
 });
