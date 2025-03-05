@@ -1,15 +1,30 @@
 //process.env.DEBUG = "*"; // enable all debug logs PARA EL SOCKET.IO
 // process.env.DEBUG = "engine, socket.io:socket";
-process.env.DEBUG = "engine, socket.io:socket, socket.io:cliente";
+// process.env.DEBUG = "engine, socket.io:socket, socket.io:cliente";
 
 const express = require("express");
 const { createServer } = require("http");
 const path = require("path");
 const { Server } = require("socket.io");
+const { instrument } = require("@socket.io/admin-ui");
 
 const app = express();
 const httpServer = createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: ["https://admin.socket.io"],
+    credentials: false,
+  },
+});
+
+instrument(io, {
+  auth: false,
+  // auth: {
+  //   type: "basic",
+  //   username: "admin",
+  //   password: "admin",
+  // },
+});
 
 const socketsOnline = [];
 
