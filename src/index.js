@@ -68,6 +68,8 @@ app.get("/", (req, res) => {
 // });
 
 // // on once off
+
+// on permite escuchar un evento varias veces. once permite escuchar un evento una única vez y off permite dejar de escuchar un evento.
 // socket.emit("on", "Este mensaje se emitira varias veces 😎 por el uso del on");
 
 // socket.emit("once", "Este mensaje se emitira una sola vez 😎 por el uso del once");
